@@ -31,7 +31,6 @@ export const styles = {
       marginBottom:5,
       paddingBottom: 2,
       maxWidth: screenWidth/2-5,
-      
     },
   },
   input: { 
@@ -46,6 +45,22 @@ export const styles = {
     flexDirection:'row',
     justifyContent:'space-between',
   },
+  button:{
+    text:{
+      textAlign: 'center',
+      fontSize: 0,
+      color:'#fff',
+    },
+    
+    backgroundColor:'#000',
+    borderColor: 'gray',
+    borderWidth: 4 ,
+    paddingLeft: 10,
+    borderRadius: 10,
+    //padding: 2,
+    marginLeft:2,
+    height: 40,
+    width: 40,
   view2:{
     display:'flex',
     flexDirection:'row-reverse',
@@ -61,6 +76,7 @@ export const styles = {
     marginTop:20, 
     marginLeft: 15,
   },
+  
   areaView:{
     backgroundColor:'#000',
     alignContent:'stretch',
