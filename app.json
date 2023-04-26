@@ -9,9 +9,9 @@
       "android"
     ],
     "android": {
-    	"package": "com.ozzey.PhysicCalculator"
+      "package": "com.ozzey.PhysicCalculator"
     },
-    "version": "1.7.2",
+    "version": "1.8.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -26,7 +26,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ozzey.PhysicCalculator"
     },
     "androidStatusBar": {
       "barStyle": "light-content",

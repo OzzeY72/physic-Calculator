@@ -20,6 +20,7 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-sqlite-storage": "^4.1.0",
     "react-navigation": "^3.0.9",
+    "socket.io-client": "^2.3.0",
     "yarn": "^1.22.0"
   },
   "devDependencies": {

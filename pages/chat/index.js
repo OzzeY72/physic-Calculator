@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Dimensions, Keyboard,AsyncStorage, } from "react-native";
 import {MainPageView}  from '../../containers/chat';
+import io from "socket.io-client";
+
 //import AsyncStorage from '@react-native-community/async-storage';
 
 export class ChatScreen extends Component {
@@ -11,21 +13,25 @@ export class ChatScreen extends Component {
     this.sendMassage = this.sendMassage.bind(this);
     this.deleteMassage = this.deleteMassage.bind(this);
     this.getMassages = this.getMassages.bind(this);
+    this.enterEditor = this.enterEditor.bind(this);
+    this.editMassage = this.editMassage.bind(this);
     this.state = { 
       height: Dimensions.get('window').height,
       author: 'anon',
       massage: '',
       time: '',
-      data:'',
+      data:[],
       loading: false,
-      data: [],
       page: 1,
       seed: 1,
       error: null,
       status:'',
+      editorMode:false,
+      visibleHeight:0,
+      first: true,
     };
   }
-
+  /*
   async Listener (){
     let response = await fetch('http://radiant-mesa-41191.herokuapp.com/massage');
     //let response = await fetch('46.175.250.105:5000/massage');
@@ -34,7 +40,7 @@ export class ChatScreen extends Component {
     if (data.length != this.state.data.length) this.setState({data:data})
 
     this.Listener();
-  }
+  }*/
 
   componentDidMount(){
     this.getMassages();
@@ -68,14 +74,70 @@ export class ChatScreen extends Component {
           error: res.error || null,
           loading: false,
           refreshing: false
-        });
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
+    console.log("123");
+    this._retrieveData();
+    //this.socket = io("http://46.175.250.105:5000");
+    this.socket = io("http://radiant-mesa-41191.herokuapp.com/");
+    this.socket.emit('req',"");
+    this.socket.on('first', msg =>{
+      if(this.state.first){
+      this.setState({
+        data: msg,
       });
+        this.setState({first: false});
+        this.forceUpdate();
+      }
+    });
+    this.socket.on("massage", msg =>{
+      console.log("1");
+      console.log(msg);
+      this.state.data.push(msg);
+      console.log(this.state.data);
+      
+        this.forceUpdate();
+    });
+    this.socket.on('edit', msg =>{
+      console.log("edit");
+      var json = this.state.data;
+      json.forEach(element=>{
+        Object.keys(element).forEach(function(key){
+          if(element[key]==msg.old){
+            var pos = json.indexOf(element);
+            json.splice(pos, 1, msg);
+          }
+        });
+      });
+      this.setState({
+          data: json,
+      });
+        this.forceUpdate();
+    });
+    this.socket.on('delete for all', msg =>{
+      console.log('delete for all');
 
+      var json = this.state.data;
+        json.forEach(element => {
+          Object.keys(element).forEach(function(key){
+          if(element[key]==msg.massage){
+            var pos = json.indexOf(element);
+            json.splice(pos, 1);
+          }
+        });
+        });
+          this.setState({
+          data: json,
+      });
+      this.forceUpdate();
+      
+    });
+    //this.Listener();
+   
   }
 
+  massageH = () =>{
+    
+
+  }
 	_retrieveData = async () => {
         try {
             const value = await AsyncStorage.getItem('author');
@@ -107,23 +169,74 @@ export class ChatScreen extends Component {
     //const url = `46.175.250.105:5000/massage`;
     Http.open('POST',url);
     Http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+   componentWillMount () {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow.bind(this))
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide.bind(this))
+  }
 
-    Http.send(body);
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove()
+    this.keyboardDidHideListener.remove()
+  }
+
+   keyboardDidShow (e) {
+    let newSize = Dimensions.get('window').height - e.endCoordinates.height
+    this.setState({
+      visibleHeight: newSize,
+    })
+  }
+  
+  keyboardDidHide (e) {
+    this.setState({
+      visibleHeight: Dimensions.get('window').height,
+    })
+  }  
+	_retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('author');
+            if (value !== null) {
+                // Our data is fetched successfully
+                this.setState({author:value});
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    }
+
+  deleteMassage = (massage) =>{
+  	var body = {"massage":massage};
+    this.socket.emit("delete for all", body);
+    if (this.state.data.length == 1){
+      this.setState({
+        editorMode:false,
+      });
+    }
+
+  }
+  editMassage = (item) =>{
+    item.massage = this.state.massage;
+    item.old = item.massage
+    this.socket.emit('edit', item);
+    this.setState({
+      massage: '',
+    });
+  }
+  
+  enterEditor = () =>{
+  	this.setState({editorMode:true});
+  }
+  exitEditor = () =>{
+  	this.setState({editorMode:false});
+  }
+
+  sendMassage = () => {
+    var body = {"massage":this.state.massage,"author":this.state.author};
+    this.socket.emit("massage", body);
     this.setState({
       massage: '',
     });
   
   }
-  /*async getUser(){
-    try {
-    const value = await AsyncStorage.getItem('name')
-    if(value !== null) {
-      this.state.author = value;
-    }
-  } catch(e) {
-  }
-  }
-  */
   render() {
     return <MainPageView scope={this}/>
   }

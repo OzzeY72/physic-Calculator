@@ -6,6 +6,9 @@ export const styles = {
     backgroundColor:'#000',
     height: screenHeight,
   },
+  bcg:{
+    backgroundColor:'#302ae8',
+  },
   flatList:{
     text:{
       textAlign: 'right',
@@ -17,6 +20,7 @@ export const styles = {
         textAlign:'right',
       },
     textbox:{
+      textAlign: 'right',
       boxSizing: 'content-box',
       borderWidth: 1,
       borderColor: 'gray',
@@ -26,7 +30,7 @@ export const styles = {
       alignSelf:'flex-end',
       marginBottom:5,
       paddingBottom: 2,
-      maxWidth: screenWidth/2,
+      maxWidth: screenWidth/2-5,
     },
   },
   input: { 
@@ -36,10 +40,11 @@ export const styles = {
     borderRadius: 10,
     backgroundColor:'#fff',
   },
-  container:{
-    
+  view:{
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between',
   },
-  
   button:{
     text:{
       textAlign: 'center',
@@ -56,17 +61,36 @@ export const styles = {
     marginLeft:2,
     height: 40,
     width: 40,
-    
+  view2:{
+    display:'flex',
+    flexDirection:'row-reverse',
+    justifyContent:'space-between',
+  },
+  buttonDel:{
+    width: 20,
+    height: 20,
+    backgroundColor:'#000',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 50,
+    marginTop:20, 
+    marginLeft: 15,
   },
   
   areaView:{
     backgroundColor:'#000',
     alignContent:'stretch',
     paddingTop:40,
-    height: screenHeight-40,
+    //height: screenHeight-40,
   },
   block:{
     backgroundColor:'#000',
     justifyItems: "flex-end",
+  },
+  black:{
+    backgroundColor:'#000',
+  },
+  dn:{
+    display:'none',
   },
 };
