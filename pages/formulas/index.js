@@ -5,6 +5,7 @@ export class FormulasScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.makeRemoteRequest = this.makeRemoteRequest.bind(this);
     this.state = { 
       loading: false,
       data: [],
@@ -12,7 +13,12 @@ export class FormulasScreen extends Component {
       seed: 1,
       error: null,
       refreshing: false,
+      switchValue: false,
     };
+  }
+
+  toggleSwitch1 = (value) => {
+      this.setState({switch1Value: value})
   }
 
   componentDidMount() {
@@ -21,7 +27,7 @@ export class FormulasScreen extends Component {
 
   makeRemoteRequest = () => {
     const { page, seed } = this.state;
-    const url = `http://192.168.0.103:8080/json/formulas.json`;
+    const url = `http://radiant-mesa-41191.herokuapp.com/json/formulas.json`;
     this.setState({ loading: true });
     fetch(url)
       .then(res => res.json())
@@ -38,9 +44,7 @@ export class FormulasScreen extends Component {
       });
   };
 
-  /*getText(){
-    setState({str: 'aaaaaaa'});
-  }*/
+
   render() {
     return <MainPageView scope={this}/>
   }

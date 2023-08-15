@@ -2,15 +2,15 @@
   buttons: [
     [
       {
-        "title": "(",
-        "value": "TemplesLeft",
+        "title": "√",
+        "value": "Root",
         "warning": false,
         "dark": false,
         "light": true
       },
       {
-        "title": ")",
-        "value": "TemplesRight",
+        "title": "^",
+        "value": "Power",
         "warning": false,
         "dark": false,
         "light": true

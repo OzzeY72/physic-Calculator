@@ -5,17 +5,17 @@ import { styles } from "./styles";
 const funcName = (value) => `on${isNaN(parseInt(value)) ? value : 'Tap'}`;
 
 export const MainPageView = ({ scope, buttons }) => {
-  const { highlight, calculation, result} = scope.state;
+  const { highlight, calculation, result, border} = scope.state;
   return (
     <Container style={styles.container}>
       <Grid>
         <Row style={styles.head.base}>
           <Col style={styles.head.text.base}>
-            <Item regular style={{flex: 2}} disabled>
-              <Input style={highlight ? styles.shadow_text : styles.base_text} value={calculation || '0'} disabled/>
+            <Item regular style={styles.head.text.base.first} disabled>
+              <Input style={[border ? styles.border : highlight ? styles.shadow_text : styles.base_text ]} value={calculation || '0'} disabled/>
             </Item>
-            <Item regular style={{flex: 1}} disabled>
-              <Input style={[styles.base_text, !highlight ? styles.shadow_text : styles.base_text]} value={result} disabled />
+            <Item regular style={styles.head.text.base.second} disabled>
+              <Input style={[border ? styles.border : !highlight ? styles.shadow_text : styles.base_text]} value={result} disabled />
             </Item>
           </Col>
         </Row>
